@@ -204,9 +204,24 @@
   .pc-only { display: none; }
   @media (min-width: 640px) { .pc-only { display: block; } }
 
+  .req-content {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  @media (min-width: 640px) {
+    .req-content {
+      display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: flex-start;
+    }
+  }
+
+  .req-text { }
   .req-photos {
     display: flex; align-items: center; justify-content: center; gap: 12px;
-    margin: 14px 0; padding: 12px 0;
+    margin: 0; padding: 0;
+  }
+  @media (min-width: 640px) {
+    .req-photos {
+      flex-direction: column; margin: 0; padding: 0;
+    }
   }
   .req-photo {
     width: 90px; height: 90px; border-radius: 8px; overflow: hidden;
@@ -215,6 +230,11 @@
   .req-photo img { width: 100%; height: 100%; object-fit: cover; }
   .req-arrow {
     font-size: 20px; font-weight: bold; color: var(--brown); flex-shrink: 0;
+  }
+  @media (min-width: 640px) {
+    .req-arrow {
+      display: none;
+    }
   }
 
   footer.notes {
@@ -613,18 +633,20 @@
     reqCard.innerHTML = `
       <div class="req-filled">
         <span class="req-part">${p.label} Requirements</span>
-        <ul>
-          <li>${items[0]}</li>
-          <li>${items[1]}</li>
-        </ul>
-        <div class="req-photos">
-          <div class="req-photo"><img src="assets/${slug}-before.png" alt="Before"></div>
-          <div class="req-arrow">→</div>
-          <div class="req-photo"><img src="assets/${slug}-after.png" alt="After"></div>
+        <div class="req-content">
+          <div class="req-text">
+            <ul>
+              <li>${items[0]}</li>
+              <li>${items[1]}</li>
+              <li>${items[2]}</li>
+            </ul>
+          </div>
+          <div class="req-photos">
+            <div class="req-photo"><img src="assets/${slug}-before.png" alt="Before"></div>
+            <div class="req-arrow">→</div>
+            <div class="req-photo"><img src="assets/${slug}-after.png" alt="After"></div>
+          </div>
         </div>
-        <ul>
-          <li>${items[2]}</li>
-        </ul>
       </div>
     `;
   }
