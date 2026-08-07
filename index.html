@@ -468,6 +468,12 @@
       </div>
 
       <div id="modalForm">
+        <div>
+          <label class="small">TikTok Handle</label>
+          <input type="text" id="tiktokHandle" placeholder="@yourhandle" />
+          <div class="field-hint">Your TikTok @handle (e.g., @sparkcreator)</div>
+        </div>
+
         <p class="modal-sub">How many videos are you submitting?</p>
         <div class="count-row" id="countRow"></div>
         <div id="rows">
@@ -752,23 +758,60 @@
 
   const SA_CODE_PATTERN = /^#\S+=$/;
 
-  submitBtn.addEventListener("click", () => {
+  submitBtn.addEventListener("click", async () => {
     if (!selectedCount) return;
+
+    const tiktokHandle = document.getElementById("tiktokHandle").value.trim();
+    if (!tiktokHandle) {
+      alert("Please enter your TikTok Handle");
+      return;
+    }
+
     const rows = document.querySelectorAll(".quest-row");
     let allValid = true;
+    const videos = [];
+
     rows.forEach((row) => {
       const sel = row.querySelector(".part-select");
       const url = row.querySelector('input[type="url"]');
       const code = row.querySelector(".sa-code");
       code.classList.remove("invalid");
+
       if (!sel.value || !url.value.trim() || !code.value.trim() || !SA_CODE_PATTERN.test(code.value.trim())) {
         allValid = false;
         if (code.value.trim() && !SA_CODE_PATTERN.test(code.value.trim())) code.classList.add("invalid");
+      } else {
+        videos.push({
+          area: sel.value === "etc" ? etcInput.value : sel.value,
+          link: url.value.trim(),
+          code: code.value.trim()
+        });
       }
     });
+
     if (!allValid) return;
-    modalForm.hidden = true;
-    successPanel.hidden = false;
+
+    // Submit to Google Sheets
+    try {
+      const response = await fetch("https://script.googleapis.com/macros/s/AKfycbzam2iC8OxY_UoCLyKEROfXHX_woB4_Ubf0iovExKEsLHySBUTGIde_Klzc_NWhbUpS/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          tiktokHandle: tiktokHandle,
+          videos: videos
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        modalForm.hidden = true;
+        successPanel.hidden = false;
+      } else {
+        alert("Error: " + result.error);
+      }
+    } catch (error) {
+      alert("Submission failed: " + error.message);
+    }
   });
 
   // ---- modal open/close ----
