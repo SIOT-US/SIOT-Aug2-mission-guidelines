@@ -204,6 +204,19 @@
   .pc-only { display: none; }
   @media (min-width: 640px) { .pc-only { display: block; } }
 
+  .req-photos {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin: 14px 0; padding: 12px 0;
+  }
+  .req-photo {
+    width: 90px; height: 90px; border-radius: 8px; overflow: hidden;
+    border: 1.5px solid var(--line); background: var(--bg);
+  }
+  .req-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .req-arrow {
+    font-size: 20px; font-weight: bold; color: var(--brown); flex-shrink: 0;
+  }
+
   footer.notes {
     margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line);
     font-size: 11.5px; color: var(--ink-soft);
@@ -596,10 +609,22 @@
     }
     const p = PARTS.find((x) => x.id === selectedPart);
     const items = REQUIREMENTS[selectedPart] || [];
+    const slug = SLUGS[selectedPart];
     reqCard.innerHTML = `
       <div class="req-filled">
         <span class="req-part">${p.label} Requirements</span>
-        <ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>
+        <ul>
+          <li>${items[0]}</li>
+          <li>${items[1]}</li>
+        </ul>
+        <div class="req-photos">
+          <div class="req-photo"><img src="assets/${slug}-before.png" alt="Before"></div>
+          <div class="req-arrow">→</div>
+          <div class="req-photo"><img src="assets/${slug}-after.png" alt="After"></div>
+        </div>
+        <ul>
+          <li>${items[2]}</li>
+        </ul>
       </div>
     `;
   }
