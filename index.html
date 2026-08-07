@@ -214,6 +214,15 @@
   }
 
   .req-text { }
+  @media (min-width: 640px) {
+    .req-text ul li:nth-child(2)::after {
+      content: " →";
+      color: var(--brown);
+      font-weight: 800;
+      margin-left: 4px;
+    }
+  }
+
   .req-photos {
     display: flex; align-items: center; justify-content: center; gap: 12px;
     margin: 0; padding: 0; flex-direction: row;
