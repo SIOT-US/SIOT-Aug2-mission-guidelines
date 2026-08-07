@@ -428,7 +428,7 @@
   </div>
 
   <div class="req-card" id="reqCard">
-    <div class="req-empty">Select an area above to see its requirements.</div>
+    <div class="req-empty">Select an area below to see its requirements.</div>
   </div>
 
   <section class="block">
@@ -670,7 +670,7 @@
 
   function renderReq() {
     if (!selectedPart) {
-      reqCard.innerHTML = `<div class="req-empty">Select an area above to see its requirements.</div>`;
+      reqCard.innerHTML = `<div class="req-empty">Select an area below to see its requirements.</div>`;
       return;
     }
     const p = PARTS.find((x) => x.id === selectedPart);
