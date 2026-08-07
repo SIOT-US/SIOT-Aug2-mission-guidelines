@@ -413,7 +413,7 @@
       <span class="mission-step">Hook</span>
       <video id="hookVideo" class="mission-video" autoplay muted playsinline></video>
       <div class="video-controls" id="hookControls"></div>
-      <p class="mission-caption">Show the <strong>problem area</strong> up close.</p>
+      <p class="mission-caption" id="hookCaption">Select an area to see the hook guide.</p>
     </div>
     <div class="mission-card mission-card--text">
       <span class="mission-step">Apply</span>
@@ -582,6 +582,7 @@
         renderParts();
         renderPhotos();
         renderReq();
+        updateHookCaption();
       });
       partGrid.appendChild(btn);
     });
@@ -666,6 +667,22 @@
     renderHookVideo();
     renderStagePhoto(applyPhoto, "apply");
     renderStagePhoto(afterPhoto, "after");
+  }
+
+  function updateHookCaption() {
+    const hookCaption = document.getElementById("hookCaption");
+    if (!selectedPart) {
+      hookCaption.textContent = "Select an area to see the hook guide.";
+      return;
+    }
+    const hookCopy = {
+      underarm: "Hook HARD with your underarm",
+      knee: "Hook HARD with your knees",
+      elbow: "Hook HARD with your elbow",
+      innerthigh: "Hook HARD with your inner thigh",
+      knuckle: "Hook HARD with your knuckles"
+    };
+    hookCaption.textContent = hookCopy[selectedPart] || "Hook HARD";
   }
 
   function renderReq() {
