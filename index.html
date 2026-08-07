@@ -180,15 +180,24 @@
   }
 
   .req-card {
-    display: none;
+    margin-top: 20px;
   }
-  .req-empty { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); font-size: 13px; height: 100%; }
+  .req-empty {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    color: var(--ink); font-size: 14px; font-weight: 600;
+    background: #ffeb3b; border: 2px solid #fdd835; border-radius: 14px;
+    padding: 24px 20px; text-align: center; min-height: 80px;
+  }
+  .req-filled {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
+    padding: 16px 18px;
+  }
   .req-filled .req-part {
     font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--brown);
-    text-transform: uppercase; display: block; margin-bottom: 7px;
+    text-transform: uppercase; display: block; margin-bottom: 10px;
   }
   .req-filled ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink); }
-  .req-filled li { margin-bottom: 4px; }
+  .req-filled li { margin-bottom: 6px; }
   .req-filled li strong { color: var(--brown-strong); font-weight: 800; }
 
   footer.notes {
@@ -347,6 +356,10 @@
     </div>
   </div>
 
+  <div class="req-card" id="reqCard">
+    <div class="req-empty">Select an area above to see its requirements.</div>
+  </div>
+
   <section class="block">
     <div class="block-head">
       <span class="block-kicker">Problem Area</span>
@@ -354,10 +367,6 @@
       <p class="block-note">Tap an area — the guide and requirements below will update to match.</p>
     </div>
     <div class="part-grid" id="partGrid"></div>
-
-    <div class="req-card" id="reqCard">
-      <div class="req-empty">Select an area above to see its requirements.</div>
-    </div>
   </section>
 
   <footer class="notes">
