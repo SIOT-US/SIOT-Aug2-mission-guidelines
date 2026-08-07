@@ -676,13 +676,13 @@
       return;
     }
     const hookCopy = {
-      underarm: "Hook HARD with your underarm",
-      knee: "Hook HARD with your knees",
-      elbow: "Hook HARD with your elbow",
-      innerthigh: "Hook HARD with your inner thigh",
-      knuckle: "Hook HARD with your knuckles"
+      underarm: "<strong>Hook HARD</strong> with your underarm",
+      knee: "<strong>Hook HARD</strong> with your knees",
+      elbow: "<strong>Hook HARD</strong> with your elbow",
+      innerthigh: "<strong>Hook HARD</strong> with your inner thigh",
+      knuckle: "<strong>Hook HARD</strong> with your knuckles"
     };
-    hookCaption.textContent = hookCopy[selectedPart] || "Hook HARD";
+    hookCaption.innerHTML = hookCopy[selectedPart] || "<strong>Hook HARD</strong>";
   }
 
   function renderReq() {
