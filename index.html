@@ -201,6 +201,9 @@
   .req-filled li::before { content: "✓"; position: absolute; left: -26px; color: var(--amber); font-weight: 800; font-size: 15px; }
   .req-filled li strong { color: var(--brown-strong); font-weight: 800; }
 
+  .pc-only { display: none; }
+  @media (min-width: 640px) { .pc-only { display: block; } }
+
   footer.notes {
     margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line);
     font-size: 11.5px; color: var(--ink-soft);
@@ -433,27 +436,27 @@
     underarm: [
       "<strong>Brightening effect</strong> is the key point.",
       "Before & after <strong>color difference</strong> must be clearly visible.",
-      "<strong>Hook HARD</strong> with your underarm — Follow our examples or bring something <strong>MORE intense</strong>!",
+      "<strong>Hook HARD</strong> with your underarm —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     knee: [
       "<strong>Brightening effect</strong> is the key point.",
       "Before & after <strong>color difference</strong> must be clearly visible.",
-      "<strong>Hook HARD</strong> with your knees — Follow our examples or bring something <strong>MORE intense</strong>!",
+      "<strong>Hook HARD</strong> with your knees —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     elbow: [
       "<strong>Brightening effect</strong> is the key point.",
       "Before & after <strong>color difference</strong> must be clearly visible.",
-      "<strong>Hook HARD</strong> with your elbow — Follow our examples or bring something <strong>MORE intense</strong>!",
+      "<strong>Hook HARD</strong> with your elbow —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     innerthigh: [
       "<strong>Brightening effect</strong> is the key point.",
       "Before & after <strong>color difference</strong> must be clearly visible.",
-      "<strong>Hook HARD</strong> with your inner thigh — Follow our examples or bring something <strong>MORE intense</strong>!",
+      "<strong>Hook HARD</strong> with your inner thigh —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     knuckle: [
       "<strong>Brightening effect</strong> is the key point.",
       "Before & after <strong>color difference</strong> must be clearly visible.",
-      "<strong>Hook HARD</strong> with your knuckles — Follow our examples or bring something <strong>MORE intense</strong>!",
+      "<strong>Hook HARD</strong> with your knuckles —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
   };
 
