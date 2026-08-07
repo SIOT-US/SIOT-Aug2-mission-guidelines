@@ -196,8 +196,9 @@
     font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--brown);
     text-transform: uppercase; display: block; margin-bottom: 10px;
   }
-  .req-filled ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink); }
-  .req-filled li { margin-bottom: 6px; }
+  .req-filled ul { margin: 0; padding-left: 0; font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .req-filled li { margin-bottom: 10px; margin-left: 26px; position: relative; }
+  .req-filled li::before { content: "✓"; position: absolute; left: -26px; color: var(--amber); font-weight: 800; font-size: 15px; }
   .req-filled li strong { color: var(--brown-strong); font-weight: 800; }
 
   footer.notes {
@@ -430,29 +431,29 @@
 
   const REQUIREMENTS = {
     underarm: [
-      "Brightening effect is the key point.",
-      "Before & after color difference must be clearly visible.",
-      "Hook HARD with your underarm — jaw-dropping intro that STOPS THE SCROLL. Follow our examples or bring something MORE intense!",
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your underarm — Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     knee: [
-      "Brightening effect is the key point.",
-      "Before & after color difference must be clearly visible.",
-      "Hook HARD with your knees — jaw-dropping intro that STOPS THE SCROLL. Follow our examples or bring something MORE intense!",
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your knees — Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     elbow: [
-      "Brightening effect is the key point.",
-      "Before & after color difference must be clearly visible.",
-      "Hook HARD with your elbow — jaw-dropping intro that STOPS THE SCROLL. Follow our examples or bring something MORE intense!",
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your elbow — Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     innerthigh: [
-      "Brightening effect is the key point.",
-      "Before & after color difference must be clearly visible.",
-      "Hook HARD with your inner thigh — jaw-dropping intro that STOPS THE SCROLL. Follow our examples or bring something MORE intense!",
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your inner thigh — Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
     knuckle: [
-      "Brightening effect is the key point.",
-      "Before & after color difference must be clearly visible.",
-      "Hook HARD with your knuckles — jaw-dropping intro that STOPS THE SCROLL. Follow our examples or bring something MORE intense!",
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your knuckles — Follow our examples or bring something <strong>MORE intense</strong>!",
     ],
   };
 
