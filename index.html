@@ -353,6 +353,30 @@
     font-family: inherit; font-weight: 700; font-size: 13.5px; color: var(--ink);
     background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 9px 22px; cursor: pointer;
   }
+
+  /* ---- hook fullscreen modal (mobile) ---- */
+  .hook-modal {
+    display: none; position: fixed; inset: 0; background: var(--bg); z-index: 50;
+    align-items: center; justify-content: center;
+  }
+  .hook-modal.open { display: flex; }
+  .hook-modal-content {
+    width: 100%; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; position: relative; padding: 50px 20px 20px;
+  }
+  .hook-modal-close {
+    position: absolute; top: 12px; right: 12px; width: 40px; height: 40px;
+    border: none; background: transparent; font-size: 32px; color: var(--ink);
+    cursor: pointer; z-index: 51; padding: 0; line-height: 1;
+  }
+  .hook-modal-close:active { opacity: 0.6; }
+  #hookModalVideo {
+    width: 100%; max-width: 100%; height: auto; aspect-ratio: 9/16;
+    object-fit: cover; border-radius: 8px; max-height: 80vh;
+  }
+  #hookModalControls {
+    margin-top: 16px; display: flex; gap: 12px; justify-content: center; width: 100%;
+  }
 </style>
 
 </head>
@@ -409,6 +433,15 @@
   <footer class="notes">
     <div><b>Before launch:</b> Submit isn't wired to the real spreadsheet yet — right now it just shows a success message without saving anything.</div>
   </footer>
+
+  <!-- Hook fullscreen modal -->
+  <div class="hook-modal" id="hookModal">
+    <div class="hook-modal-content">
+      <button type="button" class="hook-modal-close" id="closeHookModal">×</button>
+      <video id="hookModalVideo" autoplay muted playsinline></video>
+      <div id="hookModalControls"></div>
+    </div>
+  </div>
 
   <div class="submit-bar">
     <div class="submit-bar-inner">
@@ -749,6 +782,75 @@
   modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modalOverlay.classList.contains("open")) closeModal();
+  });
+
+  // ---- hook fullscreen modal (mobile) ----
+  const hookModal = document.getElementById("hookModal");
+  const closeHookModal = document.getElementById("closeHookModal");
+  const hookCard = document.querySelector(".mission-card--hook");
+  const hookModalVideo = document.getElementById("hookModalVideo");
+  const hookModalControls = document.getElementById("hookModalControls");
+
+  function openHookModal() {
+    hookModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    if (selectedPart) {
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      renderHookModalControls(currentVideoCount);
+    }
+  }
+  function closeHookModal() {
+    hookModal.classList.remove("open");
+    document.body.style.overflow = "";
+    hookModalVideo.src = "";
+    hookModalVideo.pause();
+  }
+  function renderHookModalControls(count) {
+    hookModalControls.innerHTML = "";
+    if (count <= 1) return;
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "video-btn";
+    prevBtn.textContent = "◀";
+    prevBtn.addEventListener("click", () => {
+      currentVideoNum -= 1;
+      if (currentVideoNum < 1) currentVideoNum = count;
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
+    });
+    const counter = document.createElement("div");
+    counter.className = "video-counter";
+    counter.textContent = `Video ${currentVideoNum} of ${count}`;
+    counter.id = "hookModalCounter";
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "video-btn";
+    nextBtn.textContent = "▶";
+    nextBtn.addEventListener("click", () => {
+      currentVideoNum += 1;
+      if (currentVideoNum > count) currentVideoNum = 1;
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
+    });
+    hookModalControls.appendChild(prevBtn);
+    hookModalControls.appendChild(counter);
+    hookModalControls.appendChild(nextBtn);
+  }
+
+  hookCard.addEventListener("click", openHookModal);
+  document.getElementById("closeHookModal").addEventListener("click", closeHookModal);
+  hookModal.addEventListener("click", (e) => { if (e.target === hookModal) closeHookModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && hookModal.classList.contains("open")) closeHookModal();
   });
 
   renderParts();
