@@ -795,7 +795,7 @@
 
   // ---- hook fullscreen modal (mobile) ----
   const hookModal = document.getElementById("hookModal");
-  const closeHookModal = document.getElementById("closeHookModal");
+  const closeHookModalBtn = document.getElementById("closeHookModal");
   const hookCard = document.querySelector(".mission-card--hook");
   const hookModalVideo = document.getElementById("hookModalVideo");
   const hookModalControls = document.getElementById("hookModalControls");
@@ -811,7 +811,7 @@
       renderHookModalControls(currentVideoCount);
     }
   }
-  function closeHookModal() {
+  function closeHookModalFn() {
     hookModal.classList.remove("open");
     document.body.style.overflow = "";
     hookModalVideo.src = "";
@@ -856,10 +856,10 @@
   }
 
   hookCard.addEventListener("click", openHookModal);
-  document.getElementById("closeHookModal").addEventListener("click", closeHookModal);
-  hookModal.addEventListener("click", (e) => { if (e.target === hookModal) closeHookModal(); });
+  closeHookModalBtn.addEventListener("click", closeHookModalFn);
+  hookModal.addEventListener("click", (e) => { if (e.target === hookModal) closeHookModalFn(); });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && hookModal.classList.contains("open")) closeHookModal();
+    if (e.key === "Escape" && hookModal.classList.contains("open")) closeHookModalFn();
   });
 
   renderParts();
