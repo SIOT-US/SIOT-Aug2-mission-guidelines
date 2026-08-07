@@ -882,7 +882,8 @@
     prevBtn.type = "button";
     prevBtn.className = "video-btn";
     prevBtn.textContent = "◀";
-    prevBtn.addEventListener("click", () => {
+    prevBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       currentVideoNum -= 1;
       if (currentVideoNum < 1) currentVideoNum = count;
       const slug = SLUGS[selectedPart];
@@ -899,7 +900,8 @@
     nextBtn.type = "button";
     nextBtn.className = "video-btn";
     nextBtn.textContent = "▶";
-    nextBtn.addEventListener("click", () => {
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       currentVideoNum += 1;
       if (currentVideoNum > count) currentVideoNum = 1;
       const slug = SLUGS[selectedPart];
