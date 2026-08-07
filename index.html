@@ -632,7 +632,7 @@
     prevBtn.type = "button";
     prevBtn.className = "video-btn";
     prevBtn.textContent = "◀";
-    prevBtn.addEventListener("click", () => cycleVideo(-1, count));
+    prevBtn.addEventListener("click", (e) => { e.stopPropagation(); cycleVideo(-1, count); });
 
     const counter = document.createElement("div");
     counter.className = "video-counter";
@@ -643,7 +643,7 @@
     nextBtn.type = "button";
     nextBtn.className = "video-btn";
     nextBtn.textContent = "▶";
-    nextBtn.addEventListener("click", () => cycleVideo(1, count));
+    nextBtn.addEventListener("click", (e) => { e.stopPropagation(); cycleVideo(1, count); });
 
     hookControls.appendChild(prevBtn);
     hookControls.appendChild(counter);
