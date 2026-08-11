@@ -805,11 +805,47 @@
 
     if (!allValid) return;
 
-    // Open Google Form in new tab
-    const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9Y_8paxZ9z7b3ecFwIo6cCTGaAfw1GfV6odmKvVXG_Lbz1w/viewform';
-    console.log("Opening Google Form:", GOOGLE_FORM_URL);
-    const win = window.open(GOOGLE_FORM_URL, '_blank');
-    console.log("Window opened:", win);
+    // Submit each video to Google Form (background submission)
+    const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe9Y_8paxZ9z7b3ecFwIo6cCTGaAfw1GfV6odmKvVXG_Lbz1w/formResponse';
+
+    submissions.forEach(submission => {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = FORM_ACTION;
+      form.style.display = 'none';
+
+      // TikTok Handle (entry.881008074)
+      const tiktokField = document.createElement('input');
+      tiktokField.type = 'hidden';
+      tiktokField.name = 'entry.881008074';
+      tiktokField.value = tiktokHandle;
+      form.appendChild(tiktokField);
+
+      // Problem Area (entry.23350019)
+      const areaField = document.createElement('input');
+      areaField.type = 'hidden';
+      areaField.name = 'entry.23350019';
+      areaField.value = submission.area;
+      form.appendChild(areaField);
+
+      // Video Link (entry.2008041804)
+      const linkField = document.createElement('input');
+      linkField.type = 'hidden';
+      linkField.name = 'entry.2008041804';
+      linkField.value = submission.link;
+      form.appendChild(linkField);
+
+      // Spark Ads Code (entry.1566589370)
+      const codeField = document.createElement('input');
+      codeField.type = 'hidden';
+      codeField.name = 'entry.1566589370';
+      codeField.value = submission.code;
+      form.appendChild(codeField);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    });
 
     // Show success panel and close modal
     modalForm.hidden = true;
