@@ -842,7 +842,9 @@
     document.body.style.overflow = "";
     openModalBtn.focus();
   }
-  openModalBtn.addEventListener("click", openModal);
+  openModalBtn.addEventListener("click", () => {
+    window.open('https://docs.google.com/forms/d/1YC0RrJ0saePILKxcrjsrursQ5mmKngfip_EbAo2ZKI4/viewform', '_blank');
+  });
   closeModalBtn.addEventListener("click", closeModal);
   closeSuccessBtn.addEventListener("click", () => {
     modalForm.hidden = false;
