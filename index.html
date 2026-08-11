@@ -810,15 +810,15 @@
     const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe9Y_8paxZ9z7b3ecFwIo6cCTGaAfw1GfV6odmKvVXG_Lbz1w/formResponse';
 
     videos.forEach(submission => {
-      const formData = new FormData();
-      formData.append('entry.881008074', tiktokHandle);
-      formData.append('entry.23350019', submission.area);
-      formData.append('entry.2008041804', submission.link);
-      formData.append('entry.1566589370', submission.code);
+      const params = new URLSearchParams();
+      params.append('entry.881008074', tiktokHandle);
+      params.append('entry.23350019', submission.area);
+      params.append('entry.2008041804', submission.link);
+      params.append('entry.1566589370', submission.code);
 
       fetch(FORM_ACTION, {
         method: 'POST',
-        body: formData,
+        body: params,
         mode: 'no-cors'
       }).catch(err => {
         // Expected to fail due to no-cors, but form is submitted
