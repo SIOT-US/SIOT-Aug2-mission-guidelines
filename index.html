@@ -795,6 +795,7 @@
         allValid = false;
         if (code.value.trim() && !SA_CODE_PATTERN.test(code.value.trim())) code.classList.add("invalid");
       } else {
+        const etcInput = row.querySelector(".etc-input");
         videos.push({
           area: sel.value === "etc" ? etcInput.value : sel.value,
           link: url.value.trim(),
