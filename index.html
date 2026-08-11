@@ -806,56 +806,23 @@
 
     if (!allValid) return;
 
-    // Submit each video to Google Form via hidden iframe
-    const FORM_ACTION = 'https://docs.google.com/forms/d/1YC0RrJ0saePILKxcrjsrursQ5mmKngfip_EbAo2ZKI4/formResponse';
-
-    // Create hidden iframe if not exists
-    if (!document.getElementById('hidden-iframe')) {
-      const iframe = document.createElement('iframe');
-      iframe.id = 'hidden-iframe';
-      iframe.name = 'hidden-iframe';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
+    // Submit each video to Google Apps Script
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzkzrlahn1COSxKdelylGL0hfeK2Auefgf7myxW4BFBxHC2xK7q7vSCp_nW9Dw8yDLj/exec';
 
     videos.forEach(submission => {
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = FORM_ACTION;
-      form.target = 'hidden-iframe';
-      form.style.display = 'none';
+      const params = new URLSearchParams();
+      params.append('entry.881008074', tiktokHandle);
+      params.append('entry.23350019', submission.area);
+      params.append('entry.2008041804', submission.link);
+      params.append('entry.1566589370', submission.code);
 
-      // TikTok Handle (entry.881008074)
-      const tiktokField = document.createElement('input');
-      tiktokField.type = 'hidden';
-      tiktokField.name = 'entry.881008074';
-      tiktokField.value = tiktokHandle;
-      form.appendChild(tiktokField);
-
-      // Problem Area (entry.23350019)
-      const areaField = document.createElement('input');
-      areaField.type = 'hidden';
-      areaField.name = 'entry.23350019';
-      areaField.value = submission.area;
-      form.appendChild(areaField);
-
-      // Video Link (entry.2008041804)
-      const linkField = document.createElement('input');
-      linkField.type = 'hidden';
-      linkField.name = 'entry.2008041804';
-      linkField.value = submission.link;
-      form.appendChild(linkField);
-
-      // Spark Ads Code (entry.1566589370)
-      const codeField = document.createElement('input');
-      codeField.type = 'hidden';
-      codeField.name = 'entry.1566589370';
-      codeField.value = submission.code;
-      form.appendChild(codeField);
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
+      fetch(GAS_URL, {
+        method: 'POST',
+        body: params,
+        mode: 'no-cors'
+      }).catch(err => {
+        console.log('Data sent to Google Sheets');
+      });
     });
 
     // Show success panel and close modal
