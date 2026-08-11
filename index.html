@@ -807,11 +807,14 @@
 
     // Open Google Form in new tab
     const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9Y_8paxZ9z7b3ecFwIo6cCTGaAfw1GfV6odmKvVXG_Lbz1w/viewform';
-    window.open(GOOGLE_FORM_URL, '_blank');
+    console.log("Opening Google Form:", GOOGLE_FORM_URL);
+    const win = window.open(GOOGLE_FORM_URL, '_blank');
+    console.log("Window opened:", win);
 
-    // Show success panel
+    // Show success panel and close modal
     modalForm.hidden = true;
     successPanel.hidden = false;
+    closeModal();
   });
 
   // ---- modal open/close ----
