@@ -808,7 +808,7 @@
     // Submit each video to Google Form (background submission)
     const FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSe9Y_8paxZ9z7b3ecFwIo6cCTGaAfw1GfV6odmKvVXG_Lbz1w/formResponse';
 
-    submissions.forEach(submission => {
+    videos.forEach(submission => {
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = FORM_ACTION;
