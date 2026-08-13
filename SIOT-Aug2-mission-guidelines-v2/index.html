@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>$600 Challenge Mission Board</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #f7f3ea;
+    --card: #ffffff;
+    --ink: #1e1b16;
+    --ink-soft: #7a7468;
+    --banner-bg: #e9d7b9;
+    --banner-ink: #8a4a24;
+    --brown: #7c4222;
+    --brown-strong: #5e3119;
+    --amber: #e2a63c;
+    --amber-bg: #f5dfb8;
+    --gold: #f0b429;
+    --line: #eae3d3;
+    --danger-ink: #8a2f1f;
+    --shadow: 0 2px 10px rgba(30, 20, 10, 0.07);
+    --radius-card: 16px;
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1712; --card: #262019; --ink: #f3ecdd; --ink-soft: #b8ac94;
+      --banner-bg: #3a2a16; --banner-ink: #e8b27c; --brown: #c97b44; --brown-strong: #e8935a;
+      --amber: #e8b45c; --amber-bg: #3c3120; --gold: #f0c25b; --line: #382f22;
+      --danger-ink: #e0a08f; --shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1712; --card: #262019; --ink: #f3ecdd; --ink-soft: #b8ac94;
+    --banner-bg: #3a2a16; --banner-ink: #e8b27c; --brown: #c97b44; --brown-strong: #e8935a;
+    --amber: #e8b45c; --amber-bg: #3c3120; --gold: #f0c25b; --line: #382f22;
+    --danger-ink: #e0a08f; --shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+  }
+  :root[data-theme="light"] {
+    --bg: #f7f3ea; --card: #ffffff; --ink: #1e1b16; --ink-soft: #7a7468;
+    --banner-bg: #e9d7b9; --banner-ink: #8a4a24; --brown: #7c4222; --brown-strong: #5e3119;
+    --amber: #e2a63c; --amber-bg: #f5dfb8; --gold: #f0b429; --line: #eae3d3;
+    --danger-ink: #8a2f1f; --shadow: 0 2px 10px rgba(30, 20, 10, 0.07);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+  }
+
+  .page { width: 100%; max-width: 760px; margin: 0 auto; padding: 24px 20px 130px; }
+
+  .brandbar {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .brandbar-left { display: flex; align-items: center; gap: 12px; }
+  .brandmark-logo { height: 26px; width: auto; display: block; flex-shrink: 0; }
+  @media (prefers-color-scheme: dark) { .brandmark-logo { filter: invert(1); } }
+  :root[data-theme="dark"] .brandmark-logo { filter: invert(1); }
+  :root[data-theme="light"] .brandmark-logo { filter: none; }
+  .brandbar-left .block-kicker { margin: 0; padding-top: 2px; }
+  .brand-sub { font-size: 12px; color: var(--ink-soft); }
+  @media (max-width: 479px) { .brand-sub { font-size: 10px; } }
+
+  .hero { padding: 20px 0 4px; }
+  .common-reqs-card {
+    margin-top: 14px; background: #f0d48c; border: 2.5px solid var(--brown);
+    border-radius: 16px; padding: 20px 24px; box-shadow: var(--shadow);
+  }
+  .common-reqs-label {
+    display: flex; align-items: center; gap: 6px; font-family: var(--font-mono);
+    font-size: 18px; font-weight: 800; letter-spacing: 0.1em; color: var(--brown-strong);
+    text-transform: uppercase; margin-bottom: 0;
+  }
+  .common-reqs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; max-width: 56ch; }
+  .common-reqs li { display: flex; align-items: baseline; gap: 9px; font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  .common-reqs li::before { content: "\2713"; color: var(--brown); font-weight: 800; font-size: 13px; line-height: 1.4; }
+  .common-reqs li strong { color: var(--brown-strong); font-weight: 800; text-decoration: underline; text-decoration-color: var(--amber); text-decoration-thickness: 2px; text-underline-offset: 2px; }
+
+  section.block { margin-top: 26px; }
+  .block-head { margin-bottom: 12px; }
+  .block-kicker {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--brown); text-transform: uppercase; display: block; margin-bottom: 4px;
+  }
+  .block-title { font-size: 18px; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brown-strong); }
+  .block-note { font-size: 12.5px; color: var(--ink-soft); margin: 4px 0 0; }
+
+  /* ---- part chips: one row on desktop, wraps to 2+ on mobile ---- */
+  .part-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .part-chip {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+    flex: 1 1 88px; min-width: 88px; padding: 9px 6px; background: var(--card);
+    border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; text-align: center;
+    font-family: inherit; color: var(--ink); box-shadow: var(--shadow);
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .part-chip:hover { border-color: var(--amber); }
+  .part-chip:active { transform: scale(0.97); }
+  .part-chip .icon {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--amber-bg);
+    display: grid; place-items: center; flex-shrink: 0; font-size: 15px; line-height: 1;
+  }
+  .part-chip .txt b { display: block; font-size: 11.5px; font-weight: 700; line-height: 1.2; }
+  .part-chip.is-selected { border-color: var(--brown); background: var(--amber-bg); }
+  .part-chip.is-selected .icon { background: var(--brown); color: #fff; }
+  .part-chip.is-selected .txt b { color: var(--brown-strong); }
+  @media (prefers-reduced-motion: reduce) { .part-chip { transition: none; } }
+
+  /* ---- mission board: always 3 columns side by side, one box per column ---- */
+  .mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 14px; }
+  .mission-card {
+    position: relative;
+    border-radius: 14px; padding: 12px 8px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+  }
+  .mission-card--hook { background: var(--amber-bg); border: 1.5px dashed var(--brown); }
+  .mission-card--text { background: var(--card); border: 1px solid var(--line); }
+  .mission-card:not(:last-child)::after {
+    content: "";
+    position: absolute; right: -13px; top: 21px; transform: translateY(-50%);
+    z-index: 5; pointer-events: none;
+    width: 26px; height: 26px; border-radius: 50%;
+    background-color: var(--brown);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M8 5l8 7-8 7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat; background-position: 53% center; background-size: 11px 11px;
+    box-shadow: 0 2px 5px rgba(30, 20, 10, 0.25);
+  }
+  .mission-step {
+    height: 18px; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+    letter-spacing: 0.06em; color: var(--brown); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .mission-photo {
+    width: 100%; height: clamp(150px, 42vw, 210px); border-radius: 8px; overflow: hidden;
+    margin-bottom: 8px; flex-shrink: 0; background: rgba(0, 0, 0, 0.03);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mission-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .photo-placeholder {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    border: 1.5px dashed var(--line); border-radius: 8px; background: rgba(0, 0, 0, 0.03);
+    font-size: 10.5px; color: var(--ink-soft); text-align: center; padding: 6px;
+  }
+  .hook-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--brown);
+    text-transform: uppercase; margin-bottom: 8px; display: block;
+  }
+  .mission-video {
+    width: 100%; height: clamp(150px, 42vw, 210px); border-radius: 8px; margin-bottom: 8px;
+    background: #000; display: block; flex-shrink: 0; object-fit: contain;
+  }
+  .video-controls {
+    display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px;
+  }
+  .video-btn {
+    width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s ease;
+  }
+  .video-btn:hover { border-color: var(--brown); background: var(--amber-bg); }
+  .video-counter {
+    font-size: 12px; font-weight: 600; color: var(--ink); min-width: 80px; text-align: center;
+  }
+  .mission-caption { margin: 0; font-size: 11.5px; line-height: 1.4; color: var(--ink); }
+  .mission-caption strong { color: var(--brown-strong); font-weight: 800; }
+  .pending-tag {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 9.5px; font-weight: 700;
+    color: var(--brown-strong); background: var(--card); border: 1px solid var(--brown);
+    padding: 2px 8px; border-radius: 999px;
+  }
+
+  .req-card {
+    margin-top: 20px;
+  }
+  .req-empty {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    color: var(--ink); font-size: 14px; font-weight: 600;
+    background: var(--amber-bg); border: 2px solid var(--amber); border-radius: 14px;
+    padding: 24px 20px; text-align: center; min-height: 80px;
+  }
+  .req-filled {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .req-filled .req-part {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; color: var(--brown);
+    text-transform: uppercase; display: block; margin-bottom: 10px;
+  }
+  .req-filled ul { margin: 0; padding-left: 0; font-size: 14px; color: var(--ink); line-height: 1.6; }
+  .req-filled li { margin-bottom: 10px; margin-left: 26px; position: relative; }
+  .req-filled li::before { content: "✓"; position: absolute; left: -26px; color: var(--amber); font-weight: 800; font-size: 15px; }
+  .req-filled li strong { color: var(--brown-strong); font-weight: 800; }
+
+  .pc-only { display: none; }
+  @media (min-width: 640px) { .pc-only { display: block; } }
+
+  .req-content {
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  @media (min-width: 640px) {
+    .req-content {
+      display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: flex-start;
+    }
+  }
+
+  .req-text { }
+  @media (min-width: 640px) {
+    .req-text ul li:nth-child(2)::after {
+      content: " →";
+      color: var(--brown);
+      font-weight: 800;
+      margin-left: 4px;
+    }
+  }
+
+  .req-photos {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    margin: 0; padding: 0; flex-direction: row;
+  }
+  @media (min-width: 640px) {
+    .req-photos {
+      flex-direction: row; margin: 0; padding: 0;
+    }
+  }
+  .req-photo {
+    width: 90px; height: 90px; border-radius: 8px; overflow: hidden;
+    border: 1.5px solid var(--line); background: var(--bg);
+  }
+  .req-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .req-arrow {
+    font-size: 20px; font-weight: bold; color: var(--brown); flex-shrink: 0;
+  }
+  @media (min-width: 640px) {
+    .req-arrow {
+      display: none;
+    }
+  }
+
+  footer.notes {
+    margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-size: 11.5px; color: var(--ink-soft);
+  }
+  footer.notes b { color: var(--ink); }
+
+  /* ---- sticky submit bar: full-width, hard to miss ---- */
+  .submit-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+    background: var(--card); border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 24px rgba(20, 15, 8, 0.14);
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+    display: flex; justify-content: center;
+  }
+  .submit-bar-inner { width: 100%; max-width: 720px; display: flex; align-items: center; gap: 12px; }
+  .submit-bar-text { display: none; font-size: 12px; color: var(--ink-soft); flex: 1; }
+  @media (min-width: 480px) { .submit-bar-text { display: block; } }
+  #openModalBtn {
+    flex-shrink: 0; margin-left: auto;
+    font-family: inherit; font-weight: 800; font-size: 15px; letter-spacing: 0.02em;
+    color: #fff; background: var(--brown); border: none; border-radius: 999px;
+    padding: 14px 30px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 0 var(--brown-strong);
+  }
+  #openModalBtn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--brown-strong); }
+  @media (max-width: 479px) { .submit-bar-inner { justify-content: center; } #openModalBtn { width: 100%; justify-content: center; } }
+
+  /* ---- modal ---- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(20, 15, 8, 0.45);
+    display: flex; align-items: flex-end; justify-content: center;
+    z-index: 40; opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  @media (min-width: 640px) { .modal-overlay { align-items: center; } }
+  .modal-panel {
+    background: var(--card); width: 100%; max-width: 520px; max-height: 86vh; overflow-y: auto;
+    border-radius: 20px 20px 0 0; padding: 20px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(18px); transition: transform 0.2s ease;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+  }
+  @media (min-width: 640px) {
+    .modal-panel { border-radius: 20px; transform: translateY(10px); padding-bottom: 18px; }
+  }
+  .modal-overlay.open .modal-panel { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .modal-overlay, .modal-panel { transition: none; } }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .modal-title { font-size: 17px; font-weight: 800; margin: 0; }
+  .modal-close {
+    border: none; background: var(--bg); color: var(--ink-soft); width: 30px; height: 30px;
+    border-radius: 50%; font-size: 16px; cursor: pointer; line-height: 1; font-family: inherit;
+  }
+  .modal-sub { font-size: 12.5px; color: var(--ink-soft); margin: 4px 0 16px; }
+
+  .count-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .count-btn {
+    width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--line);
+    background: var(--card); font-family: var(--font-mono); font-weight: 700; font-size: 13px;
+    color: var(--ink); cursor: pointer; transition: all 0.15s ease;
+  }
+  .count-btn:hover { border-color: var(--amber); }
+  .count-btn.is-selected { background: var(--brown); border-color: var(--brown); color: #fff; transform: scale(1.08); }
+  @media (prefers-reduced-motion: reduce) { .count-btn { transition: none; } .count-btn.is-selected { transform: none; } }
+
+  #rows { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .row-empty {
+    border: 1.5px dashed var(--line); border-radius: 14px; padding: 18px; text-align: center;
+    color: var(--ink-soft); font-size: 13px;
+  }
+  .quest-row {
+    display: grid; grid-template-columns: 30px 1fr; gap: 10px; background: var(--bg);
+    border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+  }
+  .quest-num {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--brown); color: #fff;
+    font-family: var(--font-mono); font-weight: 800; font-size: 12px; display: grid; place-items: center;
+  }
+  .quest-fields { display: grid; gap: 8px; }
+  .quest-fields .field-line { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  @media (min-width: 460px) { .quest-fields .field-line.two { grid-template-columns: 1fr 1fr; } }
+  label.small {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-soft);
+    text-transform: uppercase; display: block; margin-bottom: 4px;
+  }
+  .field-hint { font-size: 10px; color: var(--ink-soft); margin-top: 3px; }
+  select, input[type="text"], input[type="url"] {
+    width: 100%; font-family: var(--font-ui); font-size: 13px; color: var(--ink);
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 9px;
+  }
+  input.mono { font-family: var(--font-mono); }
+  input.invalid { border-color: var(--danger-ink); }
+  select:focus-visible, input:focus-visible, button:focus-visible, .part-chip:focus-visible {
+    outline: 2px solid var(--brown); outline-offset: 2px;
+  }
+  .etc-input { margin-top: 6px; }
+
+  .modal-submit-wrap { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  #submitBtn {
+    width: 100%; font-family: var(--font-ui); font-weight: 800; font-size: 14.5px; letter-spacing: 0.02em;
+    color: #fff; background: var(--brown-strong); border: none; border-radius: 999px; padding: 13px 20px;
+    cursor: pointer;
+  }
+  #submitBtn:active { transform: translateY(1px); }
+  .submit-hint { font-size: 11.5px; color: var(--ink-soft); text-align: center; }
+
+  .success-panel { text-align: center; padding: 24px 8px 8px; }
+  .success-check {
+    width: 48px; height: 48px; border-radius: 50%; background: var(--amber-bg); color: var(--brown);
+    display: grid; place-items: center; margin: 0 auto 12px; font-size: 22px; font-weight: 800;
+  }
+  .success-panel p.title { font-weight: 800; font-size: 15.5px; margin: 0 0 4px; }
+  .success-panel p.sub { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 18px; }
+  .success-panel button {
+    font-family: inherit; font-weight: 700; font-size: 13.5px; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 9px 22px; cursor: pointer;
+  }
+
+  /* ---- hook fullscreen modal (mobile) ---- */
+  .hook-modal {
+    display: none; position: fixed; inset: 0; background: var(--bg); z-index: 50;
+    align-items: center; justify-content: center;
+  }
+  .hook-modal.open { display: flex; }
+  .hook-modal-content {
+    width: 100%; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; position: relative; padding: 50px 20px 20px;
+  }
+  .hook-modal-close {
+    position: absolute; top: 12px; right: 12px; width: 40px; height: 40px;
+    border: none; background: transparent; font-size: 32px; color: var(--ink);
+    cursor: pointer; z-index: 51; padding: 0; line-height: 1;
+  }
+  .hook-modal-close:active { opacity: 0.6; }
+  #hookModalVideo {
+    width: auto; max-width: 100%; height: auto;
+    object-fit: contain; border-radius: 8px; max-height: 85vh; min-height: 450px;
+  }
+  #hookModalControls {
+    margin-top: 16px; display: flex; gap: 12px; justify-content: center; width: 100%;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="page">
+  <div class="brandbar">
+    <div class="brandbar-left">
+      <img class="brandmark-logo" src="../SIOT-Aug2-mission-guidelines/assets/siot-logo.png" alt="Siot" />
+      <span class="block-kicker">Rice Jam Mask</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="block-head">
+      <h2 class="block-title"><u>Hook – Apply – After</u> Flow</h2>
+    </div>
+  </div>
+
+  <div class="mission-grid">
+    <div class="mission-card mission-card--hook">
+      <span class="mission-step">Hook</span>
+      <video id="hookVideo" class="mission-video" autoplay muted playsinline></video>
+      <div class="video-controls" id="hookControls"></div>
+      <p class="mission-caption" id="hookCaption">Select an area to see the hook guide.</p>
+    </div>
+    <div class="mission-card mission-card--text">
+      <span class="mission-step">Apply</span>
+      <div class="mission-photo" id="applyPhoto"></div>
+      <p class="mission-caption">Apply a <strong>generous amount</strong> to the area.</p>
+    </div>
+    <div class="mission-card mission-card--text">
+      <span class="mission-step">After</span>
+      <div class="mission-photo" id="afterPhoto"></div>
+      <p class="mission-caption">Show the <strong>lighter, brighter</strong> result.</p>
+    </div>
+  </div>
+
+  <div class="req-card" id="reqCard">
+    <div class="req-empty">Select an area below to see its requirements.</div>
+  </div>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="block-kicker">Problem Area</span>
+      <h2 class="block-title">Click Your Problem Area</h2>
+      <p class="block-note">Tap an area — the guide and requirements below will update to match.</p>
+    </div>
+    <div class="part-grid" id="partGrid"></div>
+  </section>
+
+
+  <!-- Hook fullscreen modal -->
+  <div class="hook-modal" id="hookModal">
+    <div class="hook-modal-content">
+      <button type="button" class="hook-modal-close" id="closeHookModal">×</button>
+      <video id="hookModalVideo" autoplay muted playsinline></video>
+      <div id="hookModalControls"></div>
+    </div>
+  </div>
+
+  <div class="submit-bar">
+    <div class="submit-bar-inner">
+      <span class="submit-bar-text">Got videos uploaded already?</span>
+      <button type="button" id="openModalBtn">Submit Videos →</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 class="modal-title" id="modalTitle">Submit Your Videos</h3>
+        <button type="button" class="modal-close" id="closeModalBtn" aria-label="Close">✕</button>
+      </div>
+
+      <div id="modalForm">
+        <div>
+          <label class="small">TikTok Handle</label>
+          <input type="text" id="tiktokHandle" placeholder="yourhandle" />
+          <div class="field-hint">Your TikTok handle (e.g., sparkcreator)</div>
+        </div>
+
+        <p class="modal-sub">How many videos are you submitting?</p>
+        <div class="count-row" id="countRow"></div>
+        <div id="rows">
+          <div class="row-empty">Select how many videos you're submitting.</div>
+        </div>
+        <div class="modal-submit-wrap">
+          <button id="submitBtn">Submit Entries</button>
+          <span class="submit-hint">Demo only — entries aren't sent to the spreadsheet yet.</span>
+        </div>
+      </div>
+
+      <div class="success-panel" id="successPanel" hidden>
+        <div class="success-check">✓</div>
+        <p class="title">Mission complete!</p>
+        <p class="sub">Demo only — not yet wired to the real spreadsheet.</p>
+        <button type="button" id="closeSuccessBtn">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PARTS = [
+    { id: "underarm", label: "Underarm", icon: "🙆" },
+    { id: "knee", label: "Knee", icon: "🦵" },
+    { id: "elbow", label: "Elbow", icon: "💪" },
+    { id: "innerthigh", label: "Inner thigh", icon: "👙" },
+    { id: "knuckle", label: "Knuckle", icon: "✊" },
+  ];
+
+  const SLUGS = { underarm: "underarm", knee: "knee", elbow: "elbow", innerthigh: "inner-thigh", knuckle: "knuckle" };
+
+  const VIDEO_COUNTS = {
+    underarm: 3,
+    knee: 2,
+    elbow: 2,
+    innerthigh: 2,
+    knuckle: 2,
+  };
+
+  const REQUIREMENTS = {
+    underarm: [
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your underarm —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
+    ],
+    knee: [
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your knees —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
+    ],
+    elbow: [
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your elbow —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
+    ],
+    innerthigh: [
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your inner thigh —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
+    ],
+    knuckle: [
+      "<strong>Brightening effect</strong> is the key point.",
+      "Before & after <strong>color difference</strong> must be clearly visible.",
+      "<strong>Hook HARD</strong> with your knuckles —<br class=\"pc-only\">Follow our examples or bring something <strong>MORE intense</strong>!",
+    ],
+  };
+
+  const partGrid = document.getElementById("partGrid");
+  const hookVideo = document.getElementById("hookVideo");
+  const hookControls = document.getElementById("hookControls");
+  const applyPhoto = document.getElementById("applyPhoto");
+  const afterPhoto = document.getElementById("afterPhoto");
+  const reqCard = document.getElementById("reqCard");
+  const countRow = document.getElementById("countRow");
+  const rowsWrap = document.getElementById("rows");
+  const submitBtn = document.getElementById("submitBtn");
+  const openModalBtn = document.getElementById("openModalBtn");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const closeSuccessBtn = document.getElementById("closeSuccessBtn");
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalForm = document.getElementById("modalForm");
+  const successPanel = document.getElementById("successPanel");
+
+  let selectedPart = null;
+  let selectedCount = 0;
+
+  function partOptionsHtml(selectedId) {
+    let html = '<option value="" disabled ' + (selectedId ? "" : "selected") + '>Select area</option>';
+    PARTS.forEach((p) => {
+      html += `<option value="${p.id}" ${selectedId === p.id ? "selected" : ""}>${p.label}</option>`;
+    });
+    html += `<option value="etc" ${selectedId === "etc" ? "selected" : ""}>Other (write in)</option>`;
+    return html;
+  }
+
+  function renderParts() {
+    partGrid.innerHTML = "";
+    PARTS.forEach((p) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "part-chip" + (selectedPart === p.id ? " is-selected" : "");
+      btn.innerHTML = `
+        <span class="icon">${p.icon}</span>
+        <span class="txt"><b>${p.label}</b></span>
+      `;
+      btn.addEventListener("click", () => {
+        selectedPart = p.id;
+        renderParts();
+        renderPhotos();
+        renderReq();
+        updateHookCaption();
+      });
+      partGrid.appendChild(btn);
+    });
+  }
+
+  function renderStagePhoto(el, stage) {
+    if (!selectedPart) {
+      el.innerHTML = `<div class="photo-placeholder">Pick an area</div>`;
+      return;
+    }
+    const p = PARTS.find((x) => x.id === selectedPart);
+    const slug = SLUGS[selectedPart];
+    const src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-${stage}.png`;
+    const img = new Image();
+    img.alt = `${p.label} ${stage} example`;
+    img.onload = () => { el.innerHTML = ""; el.appendChild(img); };
+    img.onerror = () => { el.innerHTML = `<div class="photo-placeholder"><span class="pending-tag">Pending</span></div>`; };
+    img.src = src;
+  }
+
+  function renderHookVideo() {
+    if (!selectedPart) {
+      hookVideo.src = "";
+      hookControls.innerHTML = "";
+      return;
+    }
+    currentVideoNum = 1;
+    const slug = SLUGS[selectedPart];
+    const videoCount = VIDEO_COUNTS[selectedPart] || 1;
+    currentVideoCount = videoCount;
+    renderVideoControls(videoCount);
+    loadHookVideo(slug, 1);
+  }
+
+  function loadHookVideo(slug, videoNum) {
+    const src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${videoNum}.mp4`;
+    hookVideo.src = src;
+    hookVideo.load();
+    hookVideo.play();
+  }
+
+  function renderVideoControls(count) {
+    hookControls.innerHTML = "";
+    if (count <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "video-btn";
+    prevBtn.textContent = "◀";
+    prevBtn.addEventListener("click", (e) => { e.stopPropagation(); cycleVideo(-1, count); });
+
+    const counter = document.createElement("div");
+    counter.className = "video-counter";
+    counter.textContent = "Video 1 of " + count;
+    counter.id = "videoCounter";
+
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "video-btn";
+    nextBtn.textContent = "▶";
+    nextBtn.addEventListener("click", (e) => { e.stopPropagation(); cycleVideo(1, count); });
+
+    hookControls.appendChild(prevBtn);
+    hookControls.appendChild(counter);
+    hookControls.appendChild(nextBtn);
+  }
+
+  let currentVideoNum = 1;
+  let currentVideoCount = 1;
+
+  function cycleVideo(direction, count) {
+    currentVideoNum += direction;
+    if (currentVideoNum < 1) currentVideoNum = count;
+    if (currentVideoNum > count) currentVideoNum = 1;
+
+    const slug = SLUGS[selectedPart];
+    loadHookVideo(slug, currentVideoNum);
+    document.getElementById("videoCounter").textContent = `Video ${currentVideoNum} of ${count}`;
+  }
+
+  function renderPhotos() {
+    renderHookVideo();
+    renderStagePhoto(applyPhoto, "apply");
+    renderStagePhoto(afterPhoto, "after");
+  }
+
+  function updateHookCaption() {
+    const hookCaption = document.getElementById("hookCaption");
+    if (!selectedPart) {
+      hookCaption.textContent = "Select an area to see the hook guide.";
+      return;
+    }
+    const hookCopy = {
+      underarm: "<strong>Hook HARD</strong> with your underarm",
+      knee: "<strong>Hook HARD</strong> with your knees",
+      elbow: "<strong>Hook HARD</strong> with your elbow",
+      innerthigh: "<strong>Hook HARD</strong> with your inner thigh",
+      knuckle: "<strong>Hook HARD</strong> with your knuckles"
+    };
+    hookCaption.innerHTML = hookCopy[selectedPart] || "<strong>Hook HARD</strong>";
+  }
+
+  function renderReq() {
+    if (!selectedPart) {
+      reqCard.innerHTML = `<div class="req-empty">Select an area below to see its requirements.</div>`;
+      return;
+    }
+    const p = PARTS.find((x) => x.id === selectedPart);
+    const items = REQUIREMENTS[selectedPart] || [];
+    const slug = SLUGS[selectedPart];
+    reqCard.innerHTML = `
+      <div class="req-filled">
+        <span class="req-part">${p.label} Requirements</span>
+        <div class="req-content">
+          <div class="req-text">
+            <ul>
+              <li>${items[0]}</li>
+              <li>${items[1]}</li>
+              <li>${items[2]}</li>
+            </ul>
+          </div>
+          <div class="req-photos">
+            <div class="req-photo"><img src="../SIOT-Aug2-mission-guidelines/assets/${slug}-before.png" alt="Before"></div>
+            <div class="req-arrow">→</div>
+            <div class="req-photo"><img src="../SIOT-Aug2-mission-guidelines/assets/${slug}-after.png" alt="After"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ---- video count + rows (inside modal) ----
+  function renderCountRow() {
+    countRow.innerHTML = "";
+    for (let n = 1; n <= 10; n++) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "count-btn" + (selectedCount === n ? " is-selected" : "");
+      b.textContent = n;
+      b.addEventListener("click", () => {
+        selectedCount = n;
+        renderCountRow();
+        renderRows();
+      });
+      countRow.appendChild(b);
+    }
+  }
+
+  function renderRows() {
+    if (!selectedCount) {
+      rowsWrap.innerHTML = `<div class="row-empty">Select how many videos you're submitting.</div>`;
+      return;
+    }
+    rowsWrap.innerHTML = "";
+    for (let i = 1; i <= selectedCount; i++) {
+      const row = document.createElement("div");
+      row.className = "quest-row";
+      row.innerHTML = `
+        <div class="quest-num">${i}</div>
+        <div class="quest-fields">
+          <div class="field-line two">
+            <div>
+              <label class="small">Area</label>
+              <select class="part-select">${partOptionsHtml(null)}</select>
+              <input type="text" class="etc-input" placeholder="Type the area" style="display:none;" />
+            </div>
+            <div>
+              <label class="small">Spark Ads Code</label>
+              <input type="text" class="mono sa-code" placeholder="#SPARK1234=" />
+              <div class="field-hint">Starts with # and ends with =</div>
+            </div>
+          </div>
+          <div>
+            <label class="small">Video Link</label>
+            <input type="url" placeholder="https://" />
+          </div>
+        </div>
+      `;
+      const sel = row.querySelector(".part-select");
+      const etcInput = row.querySelector(".etc-input");
+      sel.addEventListener("change", () => {
+        etcInput.style.display = sel.value === "etc" ? "block" : "none";
+      });
+      rowsWrap.appendChild(row);
+    }
+  }
+
+  const SA_CODE_PATTERN = /^#\S+=$/;
+
+  submitBtn.addEventListener("click", async () => {
+    if (!selectedCount) return;
+
+    const tiktokHandle = document.getElementById("tiktokHandle").value.trim();
+    if (!tiktokHandle) {
+      alert("Please enter your TikTok Handle");
+      return;
+    }
+
+    const rows = document.querySelectorAll(".quest-row");
+    let allValid = true;
+    const videos = [];
+
+    rows.forEach((row) => {
+      const sel = row.querySelector(".part-select");
+      const url = row.querySelector('input[type="url"]');
+      const code = row.querySelector(".sa-code");
+      code.classList.remove("invalid");
+
+      if (!sel.value || !url.value.trim() || !code.value.trim() || !SA_CODE_PATTERN.test(code.value.trim())) {
+        allValid = false;
+        if (code.value.trim() && !SA_CODE_PATTERN.test(code.value.trim())) code.classList.add("invalid");
+      } else {
+        const etcInput = row.querySelector(".etc-input");
+        videos.push({
+          area: sel.value === "etc" ? etcInput.value : sel.value,
+          link: url.value.trim(),
+          code: code.value.trim()
+        });
+      }
+    });
+
+    if (!allValid) return;
+
+    // Submit each video to Google Apps Script
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzne8zNIxDL4_vtyd6_P2kQxhQvvAyif8oRamqbn06czGl4MlltJy1HMDkC_xgW0IaQ/exec';
+
+    videos.forEach(submission => {
+      const params = new URLSearchParams();
+      params.append('entry.1053408515', tiktokHandle);
+      params.append('entry.1889771586', submission.area);
+      params.append('entry.1351374552', submission.link);
+      params.append('entry.1380623983', submission.code);
+
+      fetch(GAS_URL, {
+        method: 'POST',
+        body: params,
+        mode: 'no-cors'
+      }).catch(err => {
+        console.log('Data sent to Google Sheets');
+      });
+    });
+
+    // Show success panel and close modal
+    modalForm.hidden = true;
+    successPanel.hidden = false;
+    closeModal();
+  });
+
+  // ---- modal open/close ----
+  function openModal() {
+    modalOverlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    closeModalBtn.focus();
+  }
+  function closeModal() {
+    modalOverlay.classList.remove("open");
+    document.body.style.overflow = "";
+    openModalBtn.focus();
+  }
+  openModalBtn.addEventListener("click", () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSewScdn27hItgArjlYz9O_glUZsKD7xVa6Xx18fOMu54e2rHg/viewform', '_blank');
+  });
+  closeModalBtn.addEventListener("click", closeModal);
+  closeSuccessBtn.addEventListener("click", () => {
+    modalForm.hidden = false;
+    successPanel.hidden = true;
+    closeModal();
+  });
+  modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modalOverlay.classList.contains("open")) closeModal();
+  });
+
+  // ---- hook fullscreen modal (mobile) ----
+  const hookModal = document.getElementById("hookModal");
+  const closeHookModalBtn = document.getElementById("closeHookModal");
+  const hookCard = document.querySelector(".mission-card--hook");
+  const hookModalVideo = document.getElementById("hookModalVideo");
+  const hookModalControls = document.getElementById("hookModalControls");
+
+  function openHookModal() {
+    hookModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    if (selectedPart) {
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      renderHookModalControls(currentVideoCount);
+    }
+  }
+  function closeHookModalFn() {
+    hookModal.classList.remove("open");
+    document.body.style.overflow = "";
+    hookModalVideo.src = "";
+    hookModalVideo.pause();
+  }
+  function renderHookModalControls(count) {
+    hookModalControls.innerHTML = "";
+    if (count <= 1) return;
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "video-btn";
+    prevBtn.textContent = "◀";
+    prevBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      currentVideoNum -= 1;
+      if (currentVideoNum < 1) currentVideoNum = count;
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
+    });
+    const counter = document.createElement("div");
+    counter.className = "video-counter";
+    counter.textContent = `Video ${currentVideoNum} of ${count}`;
+    counter.id = "hookModalCounter";
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "video-btn";
+    nextBtn.textContent = "▶";
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      currentVideoNum += 1;
+      if (currentVideoNum > count) currentVideoNum = 1;
+      const slug = SLUGS[selectedPart];
+      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.load();
+      hookModalVideo.play();
+      document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
+    });
+    hookModalControls.appendChild(prevBtn);
+    hookModalControls.appendChild(counter);
+    hookModalControls.appendChild(nextBtn);
+  }
+
+  hookCard.addEventListener("click", openHookModal);
+  closeHookModalBtn.addEventListener("click", closeHookModalFn);
+  hookModal.addEventListener("click", (e) => { if (e.target === hookModal) closeHookModalFn(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && hookModal.classList.contains("open")) closeHookModalFn();
+  });
+
+  renderParts();
+  renderPhotos();
+  renderReq();
+  renderCountRow();
+  renderRows();
+</script>
+
+</body>
+</html>
