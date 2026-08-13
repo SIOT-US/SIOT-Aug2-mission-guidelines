@@ -395,7 +395,7 @@
 <div class="page">
   <div class="brandbar">
     <div class="brandbar-left">
-      <img class="brandmark-logo" src="../SIOT-Aug2-mission-guidelines/assets/siot-logo.png" alt="Siot" />
+      <img class="brandmark-logo" src="../assets/siot-logo.png" alt="Siot" />
       <span class="block-kicker">Rice Jam Mask</span>
     </div>
   </div>
@@ -593,7 +593,7 @@
     }
     const p = PARTS.find((x) => x.id === selectedPart);
     const slug = SLUGS[selectedPart];
-    const src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-${stage}.png`;
+    const src = `../assets/${slug}-${stage}.png`;
     const img = new Image();
     img.alt = `${p.label} ${stage} example`;
     img.onload = () => { el.innerHTML = ""; el.appendChild(img); };
@@ -616,7 +616,7 @@
   }
 
   function loadHookVideo(slug, videoNum) {
-    const src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${videoNum}.mp4`;
+    const src = `../assets/${slug}-hook-${videoNum}.mp4`;
     hookVideo.src = src;
     hookVideo.load();
     hookVideo.play();
@@ -703,9 +703,9 @@
             </ul>
           </div>
           <div class="req-photos">
-            <div class="req-photo"><img src="../SIOT-Aug2-mission-guidelines/assets/${slug}-before.png" alt="Before"></div>
+            <div class="req-photo"><img src="../assets/${slug}-before.png" alt="Before"></div>
             <div class="req-arrow">→</div>
-            <div class="req-photo"><img src="../SIOT-Aug2-mission-guidelines/assets/${slug}-after.png" alt="After"></div>
+            <div class="req-photo"><img src="../assets/${slug}-after.png" alt="After"></div>
           </div>
         </div>
       </div>
@@ -866,7 +866,7 @@
     document.body.style.overflow = "hidden";
     if (selectedPart) {
       const slug = SLUGS[selectedPart];
-      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.src = `../assets/${slug}-hook-${currentVideoNum}.mp4`;
       hookModalVideo.load();
       hookModalVideo.play();
       renderHookModalControls(currentVideoCount);
@@ -890,7 +890,7 @@
       currentVideoNum -= 1;
       if (currentVideoNum < 1) currentVideoNum = count;
       const slug = SLUGS[selectedPart];
-      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.src = `../assets/${slug}-hook-${currentVideoNum}.mp4`;
       hookModalVideo.load();
       hookModalVideo.play();
       document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
@@ -908,7 +908,7 @@
       currentVideoNum += 1;
       if (currentVideoNum > count) currentVideoNum = 1;
       const slug = SLUGS[selectedPart];
-      hookModalVideo.src = `../SIOT-Aug2-mission-guidelines/assets/${slug}-hook-${currentVideoNum}.mp4`;
+      hookModalVideo.src = `../assets/${slug}-hook-${currentVideoNum}.mp4`;
       hookModalVideo.load();
       hookModalVideo.play();
       document.getElementById("hookModalCounter").textContent = `Video ${currentVideoNum} of ${count}`;
